@@ -1,9 +1,9 @@
 var db = require('../database');
 var webpush = require('web-push');
 
-var from = require("rxjs").from;
-var of = require("rxjs").of;
-var forkJoin = require("rxjs").forkJoin;
+var from = require("rxjs/observable/from").from;
+var of = require("rxjs/observable/of").of;
+var forkJoin = require("rxjs/observable/forkJoin").forkJoin;
 var catchError = require("rxjs/operators").catchError;
 var switchMap = require("rxjs/operators").switchMap;
 var map = require("rxjs/operators").map;
