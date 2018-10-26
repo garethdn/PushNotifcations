@@ -2,8 +2,12 @@
   "name": "pushnotificationsapp",
   "version": "0.0.0",
   "private": true,
+  "main": "app.js",
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "node app.js",
+    "server": "nodemon ./bin/www",
+    "preinstall": "(cd public && npm install)",
+    "postinstall": "(cd public && ng build --prod)"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
