@@ -3,13 +3,15 @@ self.addEventListener('push', function (event) {
 
   console.log(payload);
 
+  const image = getRandomImage();
+  console.log(image);
   const title = payload.messageTitle;
   const options = {
       body: payload.message,
       icon: 'images/branding/favicons/android-chrome-192x192.png',
       badge: 'images/branding/favicons/android-chrome-192x192.png',
       // image: payload.image,
-      image: 'https://picsum.photos/300/200/?random',
+      image: image,
       actions: [
         {
           action: 'panel-action',
@@ -43,3 +45,7 @@ self.addEventListener('notificationclick', function (event) {
     clients.openWindow(url)
   );
 });
+
+function getRandomImage() {
+  return `https://picsum.photos/300/200/?image=${(Math.random() * 1000).toFixed()}`
+}
