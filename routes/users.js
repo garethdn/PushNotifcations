@@ -3,7 +3,7 @@ var router = express.Router();
 var db = require('../database');
 var pushService = require('../services/push.service');
 var switchMap = require("rxjs/operators").switchMap;
-var of = require("rxjs").of;
+var of = require("rxjs/observable/of").of;
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
