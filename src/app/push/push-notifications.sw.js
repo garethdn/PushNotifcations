@@ -8,7 +8,8 @@ self.addEventListener('push', function (event) {
       body: payload.message,
       icon: 'images/branding/favicons/android-chrome-192x192.png',
       badge: 'images/branding/favicons/android-chrome-192x192.png',
-      image: payload.image,
+      // image: payload.image,
+      image: 'https://picsum.photos/300/200/?random',
       actions: [
         {
           action: 'panel-action',
