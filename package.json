@@ -7,7 +7,7 @@
     "start": "node app.js",
     "server": "nodemon ./bin/www",
     "preinstall": "(cd public && npm install)",
-    "postinstall": "(cd public && ng build --prod)"
+    "postinstall": "(cd public && npm run build)"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
