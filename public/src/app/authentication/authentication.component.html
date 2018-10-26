@@ -1,0 +1,12 @@
+<h3>Login as one of the following users</h3>
+
+<div class="form-group">
+  <div class="radio" *ngFor="let user of users">
+    <input id="radio-{{user.id}}" type="radio" (click)="setSelectedUser(user)" [checked]="selectedUser?.id === user.id">
+    <label for="radio-{{user.id}}">
+      {{user.name}}
+    </label>
+  </div>
+</div>
+
+<button [disabled]="!selectedUser" class="btn btn-lg btn-primary" (click)="save()">Save</button>

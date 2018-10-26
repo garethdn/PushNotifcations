@@ -1,0 +1,11 @@
+$fa-font-path: '~font-awesome/fonts';
+$nw-font-path: '~nw-style-guide/assets/fonts';
+$icon-font-path: '~bootstrap-sass/assets/fonts/bootstrap/';
+
+@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "node_modules/nw-style-guide/sass/styles";
+
+body {
+    background: get-color("gray", x-light);
+    color: white;
+}

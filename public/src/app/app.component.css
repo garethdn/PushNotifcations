@@ -1,0 +1,12 @@
+.container {
+  padding: 20px 0;
+}
+ul.navbar-nav {
+  height: 50px;
+}
+ul.navbar-nav li {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

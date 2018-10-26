@@ -1,0 +1,74 @@
+<div class="row">
+  <div class="col-sm-6">
+    <div class="form-group">
+      <label>Recipient Type</label>
+      <div class="radio">
+        <input id="radio-recipient-user" type="radio" [(ngModel)]="recipientType" value="user">
+        <label for="radio-recipient-user">
+          User
+        </label>
+      </div>
+
+      <div class="radio">
+        <input id="radio-recipient-team" type="radio" [(ngModel)]="recipientType" value="team">
+        <label for="radio-recipient-team">
+          Team
+        </label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Message title</label>
+      <input class="form-control" [(ngModel)]="messageTitle">
+    </div>
+
+    <!-- <div class="form-group">
+      <label>Message type</label>
+      <select name="" id="" class="form-control" [(ngModel)]="messageTypeId">
+        <option value="0" selected>Panel Alert</option>
+        <option value="1">Type 2</option>
+        <option value="2">Type 3</option>
+      </select>
+    </div> -->
+
+    <div class="form-group">
+      <label>Message body</label>
+      <textarea class="form-control" id="" cols="30" rows="10" [(ngModel)]="message"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label>Image</label>
+      <input class="form-control" [(ngModel)]="messageImage">
+    </div>
+  </div>
+
+  <div class="col-sm-6" *ngIf="recipientType === 'user'">
+    <div class="form-group">
+      <label>Choose users to push messages to</label>
+      <div class="checkbox" *ngFor="let user of users">
+        <input id="checkbox-{{user.id}}" type="checkbox" (click)="toggleUserSelection(user)" [checked]="isUserSelected(user)">
+        <label for="checkbox-{{user.id}}">
+          {{user.name}}
+        </label>
+      </div>
+    </div>
+
+    <button [disabled]="selectedUsers.length < 1" class="btn btn-lg btn-primary" (click)="send()">Send User
+      Notifications</button>
+  </div>
+
+  <div class="col-sm-6" *ngIf="recipientType === 'team'">
+    <div class="form-group">
+      <label>Choose a team ID to push messages to</label>
+      <div class="checkbox" *ngFor="let teamId of teamIds">
+        <input id="checkbox-team-{{teamId}}" type="checkbox" (click)="toggleTeamSelection(teamId)" [checked]="isTeamSelected(teamId)">
+        <label for="checkbox-team-{{teamId}}">
+          Team {{teamId}}
+        </label>
+      </div>
+
+      <button [disabled]="selectedTeams.length < 1" class="btn btn-lg btn-primary" (click)="sendToTeams()">Send Team
+        Notifications</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,41 @@
+<div class="row">
+  <div class="col-sm-6">
+    <div class="media">
+      <div class="media-left">
+        <i class="fa fa-comment icon-status" [style.color]="isPushSupported ? 'green' : 'red'"></i>
+      </div>
+      <div class="media-body">
+        <h4>Is Push Supported?</h4>
+        Does your device and browser have a reference to <code>PushManager</code> and <code>serviceWorker</code>?
+      </div>
+    </div>
+  </div>
+  
+  <div class="col-sm-6">
+    <ng-container *ngIf="isPushSupported">
+      <p class="text-success">Push is supported!</p>
+
+      <button class="btn btn-md btn-primary" *ngIf="!isUserSubscribed" (click)="enablePush()" [disabled]="isLoading">
+        <i class="fa fa-bell" aria-hidden="true"></i>
+        Subscribe to Alerts
+      </button>
+      
+      <button class="btn btn-md btn-danger" *ngIf="isUserSubscribed" (click)="disablePush()" [disabled]="isLoading">
+        <i class="fa fa-bell" aria-hidden="true"></i>
+        Unsubscribe from Alerts
+      </button>
+    </ng-container>
+
+    <p *ngIf="!isPushSupported" class="text-danger">Push is NOT supported!</p>
+  </div>
+</div>
+
+<!-- 
+<hr>
+
+<ng-container *ngIf="isPushSupported && isUserSubscribed">
+  <textarea class="form-control" type="text" rows="3" #message></textarea>
+  <button class="btn btn-lg btn-primary" (click)="testMessage(message.value)">
+    Test Message
+  </button>
+</ng-container> -->
