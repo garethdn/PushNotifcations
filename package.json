@@ -1,0 +1,20 @@
+{
+  "name": "pushnotificationsapp",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "debug": "~2.6.9",
+    "express": "~4.16.0",
+    "morgan": "~1.9.0",
+    "nedb": "^1.8.0",
+    "rxjs": "^6.3.3",
+    "web-push": "^3.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.4"
+  }
+}
