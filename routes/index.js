@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var webpush = require('web-push');
 var pushService = require('../services/push.service');
 
 var credentials = {
@@ -14,10 +13,10 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.post('/push-subscription', function(req, res, next) {
+router.post('/push-subscriptions', function(req, res, next) {
   let userId = req.body.userId;
   let sub = req.body.subscription;
-  
+
   pushService.saveSubscription(userId, sub).subscribe(id => {
     res.send({
       id: id
@@ -25,28 +24,13 @@ router.post('/push-subscription', function(req, res, next) {
   });
 });
 
-router.post('/message', function(req, res, next) {
-  const pubKey = credentials.publicKey;
-  const privateKey = credentials.privateKey;
-
-  const options = {
-    vapidDetails: {
-      subject: credentials.subject,
-      publicKey: pubKey,
-      privateKey: privateKey
-    },
-    TTL: 10,
-    contentEncoding: 'aes128gcm'
-  }
-
-  webpush.sendNotification(
-    req.body.sub,
-    req.body.message,
-    options
-  );
-
-  res.send({ message: 'thanks'});
-
+router.get('/push-subscriptions', function(req, res, next) {
+  pushService.getUserDeviceSubscriptionsByUserIds([+req.headers.userid])
+    .subscribe(subs => {
+      res.send(subs);
+    }, err => {
+      console.log(err);
+    });
 });
 
 module.exports = router;

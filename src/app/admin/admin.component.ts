@@ -17,10 +17,10 @@ export class AdminComponent implements OnInit {
   public selectedTeams: number[] = [];
   public recipientType: string = "user";
 
-  public message: string = "";
-  public messageTitle: string = "Test title";
+  public message: string = `Colin Kaepernick has signed a new, multiyear deal with Nike that makes him a face of the 30th anniversary of the "Just Do It" campaign. The ad comes days before the start of the NFL's 2018 season.`;
+  public messageTitle: string = "Alert for NY Times on Facebook";
   public messageTypeId: number = 0;
-  public messageImage: string = "";
+  public messageImage: string = "https://static01.nyt.com/images/2018/09/04/sports/03kap/merlin_143241012_bf33af10-09b1-420e-a8a1-46f5a1ed2b45-jumbo.jpg?quality=90&auto=webp";
 
   constructor(
     private _usersService: UsersService,

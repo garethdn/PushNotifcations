@@ -1,41 +1,34 @@
 <div class="row">
   <div class="col-sm-6">
-    <div class="media">
-      <div class="media-left">
-        <i class="fa fa-comment icon-status" [style.color]="isPushSupported ? 'green' : 'red'"></i>
-      </div>
-      <div class="media-body">
-        <h4>Is Push Supported?</h4>
-        Does your device and browser have a reference to <code>PushManager</code> and <code>serviceWorker</code>?
-      </div>
-    </div>
-  </div>
-  
-  <div class="col-sm-6">
     <ng-container *ngIf="isPushSupported">
-      <p class="text-success">Push is supported!</p>
+      <h4>Push is supported!</h4>
 
       <button class="btn btn-md btn-primary" *ngIf="!isUserSubscribed" (click)="enablePush()" [disabled]="isLoading">
-        <i class="fa fa-bell" aria-hidden="true"></i>
-        Subscribe to Alerts
+        Subscribe to Push Notifications
       </button>
-      
+
       <button class="btn btn-md btn-danger" *ngIf="isUserSubscribed" (click)="disablePush()" [disabled]="isLoading">
-        <i class="fa fa-bell" aria-hidden="true"></i>
-        Unsubscribe from Alerts
+        Unsubscribe from Push Notifications
       </button>
     </ng-container>
 
-    <p *ngIf="!isPushSupported" class="text-danger">Push is NOT supported!</p>
+    <ng-container *ngIf="!isPushSupported">
+      <h4>Push is NOT supported</h4>
+
+      <p>It looks like push is not supported on this device or browser.</p>
+    </ng-container>
+  </div>
+
+  <div class="col-sm-6">
+    <h4>Your saved push subscriptions</h4>
+
+    <ng-container *ngIf="!isLoadingSavedSubscriptions && savedSubscriptions.length > 0">
+      <p>You have subscribed {{savedSubscriptions.length}} device(s)</p>
+
+      <p *ngIf="isThisDeviceSubscribed">It looks like this device is subscribed</p>
+      <p *ngIf="!isThisDeviceSubscribed">Although you have subscriptions, it does not appear that this device is subscribed</p>
+    </ng-container>
+
+    <em *ngIf="savedSubscriptions.length < 1">You don't have any saved subscriptions</em>
   </div>
 </div>
-
-<!-- 
-<hr>
-
-<ng-container *ngIf="isPushSupported && isUserSubscribed">
-  <textarea class="form-control" type="text" rows="3" #message></textarea>
-  <button class="btn btn-lg btn-primary" (click)="testMessage(message.value)">
-    Test Message
-  </button>
-</ng-container> -->

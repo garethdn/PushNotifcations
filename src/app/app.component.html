@@ -2,8 +2,8 @@
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Web Push Notifications</a>
 
-    <div class="navbar-text navbar-right" style="margin-right: 20px">
-      Signed in as <a href="javascript:;" class="navbar-link">{{user.name}}</a>
+    <div class="navbar-text navbar-right" style="margin-right: 20px" *ngIf="user">
+      Signed in as {{user.name}}
     </div>
 
   </div>

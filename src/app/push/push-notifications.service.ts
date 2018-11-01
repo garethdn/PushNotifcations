@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { fromPromise } from "rxjs/observable/fromPromise";
-import { switchMap } from "rxjs/operators";
+import { switchMap, tap } from "rxjs/operators";
 import { Observable } from 'rxjs/Observable';
 import { AuthenticationService } from '../authentication/authentication.service';
 
@@ -11,22 +11,21 @@ const VAPID_PUB_KEY = 'BGmS0CC1dDute0bRgXzjzK33-GNWJMS1UyJXA3B9l2pvEYXYuXVg1jgyx
 export class PushNotificationsService {
 
   private _swRegistration: ServiceWorkerRegistration;
+  public savedSubscriptions: { userId: number, subscription: string }[] = [];
 
   constructor(
     private _http: HttpClient,
-    private _authService: AuthenticationService) {
-
-    if (this.isPushSupported) {
-      this._registerServiceWorker();
-    }
-  }
+    private _authService: AuthenticationService) {}
 
   get isPushSupported(): boolean {
     return ('serviceWorker' in navigator) && ('PushManager' in window);
   }
 
   getActiveSubscription(): Observable<PushSubscription> {
-    return fromPromise(this._swRegistration.pushManager.getSubscription())
+    return this._registerServiceWorker()
+      .pipe(
+        switchMap(registration => fromPromise(this._swRegistration.pushManager.getSubscription()))
+      )
   }
 
   subscribe(): Observable<PushSubscription> {
@@ -36,7 +35,14 @@ export class PushNotificationsService {
       applicationServerKey: applicationServerKey
     });
 
-    return fromPromise(prom);
+    return fromPromise(prom).pipe(
+      tap(sub => this.savedSubscriptions.push({
+        userId: this._authService.user.id,
+        subscription: JSON.stringify(sub)
+      })),
+      tap(sub => {
+        console.log(this.savedSubscriptions)
+      }))
   }
 
   unsubscribe(): Observable<boolean> {
@@ -45,19 +51,22 @@ export class PushNotificationsService {
     )
   }
 
+  getSavedSubscriptions(): Observable<{ userId: number, subscription: string }[]> {
+    return this._http.get<{ userId: number, subscription: string }[]>('/push-subscriptions')
+      .pipe(
+        tap(subs => this.savedSubscriptions = subs)
+      );
+  }
+
   saveSubscription(sub: PushSubscription): Observable<any> {
-    return this._http.post('/push-subscription', {
+    return this._http.post('/push-subscriptions', {
       userId: this._authService.user.id,
       subscription: JSON.stringify(sub)
     });
   }
 
   deleteSubscription(sub: PushSubscription): Observable<any> {
-    return this._http.delete('/push-subscription');
-  }
-
-  testMessage(sub: PushSubscription, message: string): Observable<any> {
-    return this._http.post('/message', { message, sub });
+    return this._http.delete('/push-subscriptions');
   }
 
   notifyUsers(userIds: number[], payload: PushPayload) {
@@ -68,16 +77,14 @@ export class PushNotificationsService {
     return this._http.post<{ sent: number, failed: number }>('/users/teams/notify', { teamIds, payload });
   }
 
-  private _registerServiceWorker(): Promise<void | ServiceWorkerRegistration> {
-    return navigator.serviceWorker.register('push-notifications.sw.js')
-      .then(registration => {
-        console.log('Service worker successfully registered.');
-        this._swRegistration = registration;
-        return registration;
-      })
-      .catch(err => {
-        console.error('Unable to register service worker.', err);
-      });
+  private _registerServiceWorker(): Observable<ServiceWorkerRegistration> {
+    return fromPromise(navigator.serviceWorker.register('push-notifications.sw.js'))
+      .pipe(
+        tap(registration => {
+          console.log('Service worker successfully registered.');
+          this._swRegistration = registration;
+        }),
+      );
   }
 
   private _urlB64ToUint8Array(base64String) {
